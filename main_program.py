@@ -65,7 +65,73 @@ def clear_screen():
         os.system("clear")
 
 #Sign up/ Login from Jerry
+users = {}
+current_user = ""
 
+# Create the file if it does not exist.
+with open("users.txt", "a") as file:
+    pass
+
+# Read saved usernames and passwords.
+with open("users.txt", "r") as file:
+    for line in file:
+        line = line.strip()
+        if line != "":
+            username, password = line.split(",")
+            users[username] = password
+
+while True:
+    print("\n--- Login System ---")
+    print("1. Create account")
+    print("2. Log in")
+    print("3. Log out")
+    print("4. Exit")
+
+    choice = input("Choose an option: ")
+
+    if choice == "1":
+        username = input("Enter a new username: ").strip()
+        password = input("Enter a new password: ").strip()
+
+        if username == "" or password == "":
+            print("Username and password cannot be empty.")
+        elif "," in username or "," in password:
+            print("Please do not use commas.")
+        elif username in users:
+            print("This username already exists.")
+        else:
+            with open("users.txt", "a") as file:
+                file.write(username + "," + password + "\n")
+            users[username] = password
+            print("Account created!")
+
+    elif choice == "2":
+        if current_user != "":
+            print("Please log out first.")
+        else:
+            username = input("Username: ").strip()
+            password = input("Password: ").strip()
+
+            if username in users and users[username] == password:
+                current_user = username
+                print("Welcome, " + current_user + "!")
+            else:
+                print("Incorrect username or password.")
+
+    elif choice == "3":
+        if current_user == "":
+            print("You are not logged in.")
+        else:
+            current_user = ""
+            print("You have logged out.")
+
+    elif choice == "4":
+        print("Goodbye!")
+        break
+
+    else:
+        print("Please enter 1, 2, 3, or 4.")
+        
 print("\n")
 print("Study Information Assistance\n")
 print("Course Information Inquiry(1)\n")
